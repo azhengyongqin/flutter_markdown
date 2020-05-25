@@ -84,6 +84,7 @@ class MarkdownStyleSheet {
         backgroundColor: theme.cardTheme?.color ?? theme.cardColor,
         fontFamily: "monospace",
         fontSize: theme.textTheme.bodyText2.fontSize * 0.85,
+        color: Colors.redAccent,
       ),
       h1: theme.textTheme.headline5,
       h2: theme.textTheme.headline6,
@@ -112,11 +113,13 @@ class MarkdownStyleSheet {
       tableColumnWidth: const FlexColumnWidth(),
       tableCellsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       tableCellsDecoration: const BoxDecoration(),
-      blockquotePadding: const EdgeInsets.all(8.0),
+      blockquotePadding:
+          const EdgeInsets.only(left: 16, top: 8, right: 8, bottom: 8),
       blockquoteDecoration: BoxDecoration(
-        color: Colors.blue.shade100,
-        borderRadius: BorderRadius.circular(2.0),
-      ),
+          color: theme.cardColor,
+          border: Border(
+            left: BorderSide(color: theme.accentColor, width: 6),
+          )),
       codeblockPadding: const EdgeInsets.all(8.0),
       codeblockDecoration: BoxDecoration(
         color: theme.cardTheme?.color ?? theme.cardColor,
@@ -248,6 +251,7 @@ class MarkdownStyleSheet {
         backgroundColor: theme.cardTheme?.color ?? theme.cardColor,
         fontFamily: "monospace",
         fontSize: theme.textTheme.bodyText2.fontSize * 0.85,
+        color: Colors.redAccent,
       ),
       h1: theme.textTheme.headline2,
       h2: theme.textTheme.headline3,
@@ -275,11 +279,13 @@ class MarkdownStyleSheet {
       tableColumnWidth: const FlexColumnWidth(),
       tableCellsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       tableCellsDecoration: const BoxDecoration(),
-      blockquotePadding: const EdgeInsets.all(8.0),
+      blockquotePadding:
+          const EdgeInsets.only(left: 16, top: 8, right: 8, bottom: 8),
       blockquoteDecoration: BoxDecoration(
-        color: Colors.blue.shade100,
-        borderRadius: BorderRadius.circular(2.0),
-      ),
+          color: theme.cardColor,
+          border: Border(
+            left: BorderSide(color: theme.accentColor, width: 6),
+          )),
       codeblockPadding: const EdgeInsets.all(8.0),
       codeblockDecoration: BoxDecoration(
         color: theme.cardTheme?.color ?? theme.cardColor,
