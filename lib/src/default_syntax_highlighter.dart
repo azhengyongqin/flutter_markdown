@@ -81,7 +81,7 @@ class DefaultSyntaxHighlighter extends SyntaxHighlighter {
 
   @override
   TextSpan format(String language, String src) {
-    print('language:$language,src:$src');
+//    print('language:$language,src:$src');
 
     var _textStyle = TextStyle(
       fontFamily: _defaultFontFamily,
