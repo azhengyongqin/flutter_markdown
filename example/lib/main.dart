@@ -6,93 +6,79 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 const String _markdownData = """
-# Markdown Example
-Markdown allows you to easily include formatted text, images, and even formatted Dart code in your app.
+```go
+package main
 
-## Titles
+import "github.com/gin-gonic/gin"
 
-Setext-style
-
-```
-This is an H1
-=============
-
-This is an H2
--------------
-```
-
-Atx-style
-
-```
-# This is an H1
-
-## This is an H2
-
-###### This is an H6
-```
-
-Select the valid headers:
-
-- [x] `# hello`
-- [ ] `#hello`
-
-## Links
-
-[Google's Homepage][Google]
-
-```
-[inline-style](https://www.google.com)
-
-[reference-style][Google]
-```
-
-## Images
-
-![Flutter logo](/dart-lang/site-shared/master/src/_assets/image/flutter/icon/64.png)
-
-## Tables
-
-|Syntax                                 |Result                               |
-|---------------------------------------|-------------------------------------|
-|`*italic 1*`                           |*italic 1*                           |
-|`_italic 2_`                           | _italic 2_                          |
-|`**bold 1**`                           |**bold 1**                           |
-|`__bold 2__`                           |__bold 2__                           |
-|`This is a ~~strikethrough~~`          |This is a ~~strikethrough~~          |
-|`***italic bold 1***`                  |***italic bold 1***                  |
-|`___italic bold 2___`                  |___italic bold 2___                  |
-|`***~~italic bold strikethrough 1~~***`|***~~italic bold strikethrough 1~~***|
-|`~~***italic bold strikethrough 2***~~`|~~***italic bold strikethrough 2***~~|
-
-## Styling
-Style text as _italic_, __bold__, ~~strikethrough~~, or `inline code`.
-
-- Use bulleted lists
-- To better clarify
-- Your points
-
-## Code blocks
-Formatted Dart code looks really pretty too:
-
-```
-void main() {
-  runApp(MaterialApp(
-    home: Scaffold(
-      body: Markdown(data: markdownData),
-    ),
-  ));
+func main() {
+	r := gin.Default()
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
+	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 ```
 
-## Markdown widget
+**模板**：
+```html
+<filter-table @on-search="onSearch"
+              :data="users"
+              :columns="tableColumns">
+</filter-table>
+```
+**列描述数据对象：**
+```js
+tableColumns: [
+  {
+    title: '用户名',
+    key: 'username',
+    filter: {
+      type: 'Input' //输入框过滤
+    }
+  },
+  {
+    title: '状态',
+    key: 'status',
+    filter: {
+      type: 'Select',//下拉框过滤
+      option: userStatus //下拉框选项数据对象
+    }
+  }
+]
+```
+**下拉框选项数据格式：**
+```js
+  const userStatus = {
+    0: {
+      value: 0,
+      name: '全部'
+    },
+    1: {
+      value: 1,
+      name: '已锁定',
+      color: 'red'
+    },
+    2: {
+      value: 2,
+      name: '正常',
+      color: 'green'
+    },
+  };
+```
+**触发搜索事件：**
 
-This is an example of how to create your own Markdown widget:
+```js
+onSearch(search) {
+  //模拟数据库查询数据
+  //这个search应该是传到后台,然后台来根据条件查询数据库
+  alert('查询条件：'+JSON.stringify(search,null,4));
+}
+```
 
-    Markdown(data: 'Hello _world_!');
 
-Enjoy!
-
-[Google]: https://www.google.com/
 """;
 
 void main() {
@@ -107,6 +93,7 @@ void main() {
         ),
         body: SafeArea(
           child: Markdown(
+            syntaxHighlighter: DefaultSyntaxHighlighter(defaultLanguage: 'java'),
             controller: controller,
             selectable: true,
             data: _markdownData,

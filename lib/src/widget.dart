@@ -33,7 +33,7 @@ typedef Widget MarkdownCheckboxBuilder(bool value);
 abstract class SyntaxHighlighter {
   // ignore: one_member_abstracts
   /// Returns the formatted [TextSpan] for the given string.
-  TextSpan format(String source);
+  TextSpan format(String language,String source);
 }
 
 /// Enum to specify which theme being used when creating [MarkdownStyleSheet]
@@ -193,10 +193,10 @@ class _MarkdownWidgetState extends State<MarkdownWidget> implements MarkdownBuil
   }
 
   @override
-  TextSpan formatText(MarkdownStyleSheet styleSheet, String code) {
+  TextSpan formatText(MarkdownStyleSheet styleSheet,String language, String code) {
     code = code.replaceAll(RegExp(r'\n$'), '');
     if (widget.syntaxHighlighter != null) {
-      return widget.syntaxHighlighter.format(code);
+      return widget.syntaxHighlighter.format(language,code);
     }
     return TextSpan(style: styleSheet.code, text: code);
   }

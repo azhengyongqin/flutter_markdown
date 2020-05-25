@@ -82,7 +82,8 @@ abstract class MarkdownBuilderDelegate {
   /// element.
   ///
   /// The `styleSheet` is the value of [MarkdownBuilder.styleSheet].
-  TextSpan formatText(MarkdownStyleSheet styleSheet, String code);
+  TextSpan formatText(MarkdownStyleSheet styleSheet, String language,
+      String code);
 }
 
 /// Builds a [Widget] tree from parsed Markdown.
@@ -91,6 +92,8 @@ abstract class MarkdownBuilderDelegate {
 ///
 ///  * [Markdown], which is a widget that parses and displays Markdown.
 class MarkdownBuilder implements md.NodeVisitor {
+  Map<String, String> elementAttributes;
+
   /// Creates an object that builds a [Widget] tree from parsed Markdown.
   MarkdownBuilder({
     @required this.delegate,
@@ -160,6 +163,7 @@ class MarkdownBuilder implements md.NodeVisitor {
   @override
   bool visitElementBefore(md.Element element) {
     final String tag = element.tag;
+    this.elementAttributes = element.attributes;
     if (_currentBlockTag == null) _currentBlockTag = tag;
     if (_isBlockTag(tag)) {
       _addAnonymousBlockIfNeeded();
@@ -205,11 +209,21 @@ class MarkdownBuilder implements md.NodeVisitor {
 
     Widget child;
     if (_blocks.last.tag == 'pre') {
+      var language ;
+      if (this.elementAttributes != null &&
+          this.elementAttributes['class'] != null) {
+         var cls = this.elementAttributes['class'].split('-');
+         if (cls.length == 2){
+           language = cls[1];
+         }
+      }
+
       child = Scrollbar(
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           padding: styleSheet.codeblockPadding,
-          child: _buildRichText(delegate.formatText(styleSheet, text.text)),
+          child: _buildRichText(
+              delegate.formatText(styleSheet, language, text.text)),
         ),
       );
     } else {
@@ -230,7 +244,6 @@ class MarkdownBuilder implements md.NodeVisitor {
   @override
   void visitElementAfter(md.Element element) {
     final String tag = element.tag;
-
     if (_isBlockTag(tag)) {
       _addAnonymousBlockIfNeeded();
 
@@ -280,7 +293,9 @@ class MarkdownBuilder implements md.NodeVisitor {
           defaultColumnWidth: styleSheet.tableColumnWidth,
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           border: styleSheet.tableBorder,
-          children: _tables.removeLast().rows,
+          children: _tables
+              .removeLast()
+              .rows,
         );
       } else if (tag == 'blockquote') {
         _isInBlockquote = false;
@@ -298,7 +313,7 @@ class MarkdownBuilder implements md.NodeVisitor {
         );
       } else if (tag == 'hr') {
         child = Container(
-          decoration: styleSheet.horizontalRuleDecoration
+            decoration: styleSheet.horizontalRuleDecoration
         );
       }
 
@@ -471,10 +486,8 @@ class MarkdownBuilder implements md.NodeVisitor {
   }
 
   /// Merges adjacent [TextSpan] children
-  List<Widget> _mergeInlineChildren(
-    List<Widget> children,
-    TextAlign textAlign,
-  ) {
+  List<Widget> _mergeInlineChildren(List<Widget> children,
+      TextAlign textAlign,) {
     List<Widget> mergedTexts = <Widget>[];
     for (Widget child in children) {
       if (mergedTexts.isNotEmpty &&

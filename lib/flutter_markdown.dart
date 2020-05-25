@@ -8,3 +8,4 @@ library flutter_markdown;
 export 'src/builder.dart';
 export 'src/style_sheet.dart';
 export 'src/widget.dart';
+export 'src/default_syntax_highlighter.dart';
